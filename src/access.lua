@@ -11,8 +11,8 @@ local http = require  "socket.http"
 local ltn12 = require "ltn12"
 local pl = require 'pl.pretty'
 
-socket.TIMEOUT = 0
-socket.http.TIMEOUT = 0
+socket.TIMEOUT = 20
+socket.http.TIMEOUT = 20
 
 -- setup some app-level vars
 local client_id = "64a87b1316e8a0f2fbb2"
@@ -27,32 +27,36 @@ local create = function() local req_sock = socket.tcp() req_sock:settimeout(nil)
 if not access_token and not code then
     ngx.redirect("https://github.com/login/oauth/authorize?client_id=" .. client_id)
 elseif code then
-    local url =  "http://google.com"
-    --local url = "https://github.com/login/oauth/access_token" 
+    --local url = "http://10.0.2.2:4000"
+    --local url =  "https://google.com"
+    local url = "https://github.com/login/oauth/access_token" 
     local request_body =  "code=" .. code .. "&client_id=" .. client_id .. "&client_secret=" .. client_secret
     local response_body = {}
-    local r, c, h = socket.http.request(url)
-    -- local r, c, h = socket.http.request {
-    --     method = "POST",
-    --     --url = "http://10.0.2.2:3000/?" .. request_body,
-    --     url = "https://github.com/login/oauth/access_token",
-    --     headers = {
-    --         ["Accept"] = "application/json",
-    --         ["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8",
-    --         ["Content-Length"] = #request_body
-    --     },
-    --     sink = ltn12.sink.table(response_body)
-    --     ,source = ltn12.source.string(request_body)
-    --     --,create = create
-    -- }
+    --local r, c, h = socket.http.request(url)
+    local r, c, h = socket.http.request {
+        url = url,
+        method = "POST",
+        redirect = true,
+        headers = {
+            ["TE"] = "trailers, deflate",
+            --["Host"] = "github.com",
+            ["User-Agent"] = "",
+            ["Accept"] = "application/json",
+            ["Connection"] = "keep-alive",
+            ["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8",
+            ["Content-Length"] = #request_body
+        },
+        sink = ltn12.sink.table(response_body)
+        ,source = ltn12.source.string(request_body)
+        --,create = create
+    }
+
+    --ngx.status = ngx.HTTP_UNAUTHORIZED
+    --ngx.say({"status:", 401, "message:", url .. request_body})
     ngx.say(r)
     ngx.say(c)
-    --ngx.say(pl.dump(h))
-    ngx.say(request_body)
     ngx.say(response_body)
-    --ngx.say(response_body)
-
-    ngx.exit(500)
+    ngx.exit(401)
 elseif ngx.var.arg_access_token then
     ngx.exit(403)
 end
