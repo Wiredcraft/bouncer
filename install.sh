@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#GHK_REPO="https://github.com/Wiredcraft/GHKeeper.git"
-GHK_REPO="https://gist.github.com/ab85e25b19a7fe2fc24c.git"
+GHK_REPO="https://github.com/Wiredcraft/bouncer.git"
+#GHK_REPO="https://gist.github.com/ab85e25b19a7fe2fc24c.git"
 GHK_ROOT=/opt/ghk
 GHK_SCRIPT=${GHK_ROOT}/ghk-server
 GHK_DAEMON=/etc/init.d/ghk-server

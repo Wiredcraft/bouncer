@@ -11,7 +11,7 @@
 ### Install
 
 ```bash
-[sudo] bash -c "$(curl -fsSL https://gist.githubusercontent.com/kuno/ab85e25b19a7fe2fc24c/raw/fdcd71d811d50d5a3bfffba6d0603df0114bef44/install.sh)"
+[sudo] bash -c "$(curl -fsSL https://raw.github.com/Wiredcraft/bouncer/master/install.sh)"
 ```
 
 ### Security
