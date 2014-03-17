@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GHK_REPO="https://github.com/Wiredcraft/gh_keeper.git"
+GHK_REPO="https://github.com/Wiredcraft/GHKeeper.git"
 GHK_ROOT=/opt/ghk
 GHK_SCRIPT=${GHK_ROOT}/ghk-server
 GHK_DAEMON=/etc/init.d/ghk-server
@@ -23,10 +23,14 @@ echo -n "Proxy port - port [80]: "
 read PORT
 echo -n "Upstream - upstream [127.0.0.1:3000]: "
 read UPSTREAM
-#echo -n "Redirect url from githu oauth - Redirect[0.0.0.0:80]: "
-#read REDIRECT
-echo -n "Allowed organizations, separated names by commma - [,]: "
+echo -n "Allowed organizations, separated names by commma - [xxx,yyy]: "
 read ORGANIZATIONS
+echo -n "Oauth client id - [xxx]"
+read CLIENT_ID
+echo -n "Oauth client secret - [yyy]"
+read CLIENT_SECRET
+echo -n "Githubt app name - [some app name]"
+read APP_NAME
 
 # Apply defauts
 if [[ -z "$PORT" ]]; then
@@ -44,6 +48,18 @@ else
 fi
 if [[ -z "$ORGANIZATIONS" ]]; then
   echo "You need to specify some orgs. Exiting..."
+  exit 1
+fi
+if [[ -z "$APP_NAME" ]]; then
+  echo "You need to specify app id. Exiting..."
+  exit 1
+fi
+if [[ -z "$CLIENT_ID" ]]; then
+  echo "You need to specify client id. Exiting..."
+  exit 1
+fi
+if [[ -z "$CLIENT_SECRET" ]]; then
+  echo "You need to specify client secret. Exiting..."
   exit 1
 fi
 
@@ -65,6 +81,5 @@ fi
 echo "Preparing init script"
 echo $UPSTREAM
 cp ${GHK_SCRIPT} ${GHK_DAEMON}
-sed -i "s/PROXY_PORT/$PORT/g; s/PROXY_UPSTREAM/http:\/\/${UPSTREAM}/g; s/PROXY_ORGANIZATIONS/$ORGANIZATIONS/g" ${GHK_DAEMON}
-#sed -i "s/PROXY_PORT/$PORT/g; s/PROXY_UPSTREAM/http:\/\/${UPSTREAM}/g; s/PROXY_REDIRECT_URL/http:\/\/${REDIRECT}/g; s/PROXY_ORGANIZATIONS/$ORGANIZATIONS/g" ${GHK_DAEMON}
+sed -i "s/PROXY_APP_NAME/\"$APP_NAME\"/g; s/PROXY_CLIENT_ID/$CLIENT_ID/g; s/PROXY_CLIENT_SECRET/$CLIENT_SECRET/g; s/PROXY_PORT/$PORT/g; s/PROXY_UPSTREAM/http:\/\/${UPSTREAM}/g; s/PROXY_ORGANIZATIONS/$ORGANIZATIONS/g" ${GHK_DAEMON}
 echo "Run [sudo] service ghk-server [re]start"

@@ -12,9 +12,11 @@ export NODE_PATH=/opt/node/lib/node_modules:$NODE_PATH
 export DEBUG="ghk:*"
 
 # Specific to this instance of the health script
+export GHK_APP_NAME=PROXY_APP_NAME;
+export GHK_CLIENT_ID=PROXY_CLIENT_ID;
+export GHK_CLIENT_SECRET=PROXY_CLIENT_SECRET;
 export GHK_PORT=PROXY_PORT
 export GHK_UPSTREAM=PROXY_UPSTREAM
-export GHK_REDIRECT_URL=PROXY_REDIRECT_URL
 export GHK_ORGANIZATIONS=PROXY_ORGANIZATIONS
 
 GHK_ROOT=/opt/ghk

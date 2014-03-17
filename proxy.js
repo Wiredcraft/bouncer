@@ -18,9 +18,11 @@ var proxy = httpProxy.createProxyServer({});
 var config = require(path.resolve(__dirname, 'config.json'));
 
 //
+var appName = process.env.GHK_APP_NAME;
+var oauthClientId = process.env.GHK_CLIENT_ID;
+var oauthClientSecret = process.env.GHK_CLIENT_SECRET;
 var port = process.env.GHK_PORT || 80;
 var upstream = process.env.GHK_UPSTREAM || 'http://127.0.0.1:3000';
-//var redirectURL = process.env.GHK_REDIRECT_URL || 'http://0.0.0.0:80';
 var organizations = process.env.GHK_ORGANIZATIONS ? process.env.GHK_ORGANIZATIONS.split(',') : [];
 
 //
@@ -33,8 +35,8 @@ function grantAccessToken(code, callback) {
     return request({uri: config.GHAcessTokenURL,
             method: "POST",
             form: {
-                client_id: config.OAuthClientId,
-                client_secret: config.OAuthClientSecret,
+                client_id: oauthClientId,
+                client_secret: oauthClientSecret,
                 scope: config.GHOAuthScope,
                 code: code
             },
@@ -50,7 +52,7 @@ function getOrgs(token, callback) {
         uri: config.GHUserOrgsURL,
         method: "GET",
         headers: {
-            "User-Agent": config.GHAPPName,
+            "User-Agent": appName,
             "Authorization": "token " + token
         }}, callback);
 }
@@ -82,7 +84,7 @@ var app = connect()
     info("Request headers: %j", req.headers);
     var code = req.query.code;
     var token = req.cookies.get(config.cookieName, {signed: true});
-    var authURL = config.GHAuthURL + '?client_id=' + config.OAuthClientId + "&scope=" + config.GHOAuthScope;
+    var authURL = config.GHAuthURL + '?client_id=' + oauthClientId + "&scope=" + config.GHOAuthScope;
 
     if (!code && !token) {
         info("Request have not code neither token");
@@ -152,8 +154,10 @@ var app = connect()
 //
 http.createServer(app).listen(port, function(err) {
  if (err) return debug(err.message || err);
+    info("App name: %s", appName);
+    info("Client id: %s", oauthClientId);
+    info("Client secret: %s", oauthClientSecret);
     info('Proxy server listening on port %d', port);
     info('Proxy to upstream: %s', upstream);
-    //info('Proxy oauth redirect url is %s', redirectURL);
     info('Allow those who are members of %j go through', organizations);
 });
