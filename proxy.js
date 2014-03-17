@@ -157,6 +157,7 @@ http.createServer(app).listen(port, function(err) {
     info("App name: %s", appName);
     info("Client id: %s", oauthClientId);
     info("Client secret: %s", oauthClientSecret);
+    info("Cookie secret: %s", config.secret);
     info('Proxy server listening on port %d', port);
     info('Proxy to upstream: %s', upstream);
     info('Allow those who are members of %j go through', organizations);

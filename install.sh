@@ -1,6 +1,7 @@
 #!/bin/bash
 
-GHK_REPO="https://github.com/Wiredcraft/GHKeeper.git"
+#GHK_REPO="https://github.com/Wiredcraft/GHKeeper.git"
+GHK_REPO="https://gist.github.com/ab85e25b19a7fe2fc24c.git"
 GHK_ROOT=/opt/ghk
 GHK_SCRIPT=${GHK_ROOT}/ghk-server
 GHK_DAEMON=/etc/init.d/ghk-server
@@ -19,6 +20,16 @@ if [[ ! ${NPM_BIN} ]];then
   exit 1
 fi
 
+#
+if [ ! -d ${GHK_ROOT}/.git ];then
+  echo "Fetching ghk-server code"
+  git clone ${GHK_REPO} ${GHK_ROOT}
+else
+  echo "Updating ghk-server code"
+  cd ${GHK_ROOT}
+  git pull
+fi
+
 echo -n "Proxy port - port [80]: "
 read PORT
 echo -n "Upstream - upstream [127.0.0.1:3000]: "
@@ -31,6 +42,7 @@ echo -n "Oauth client secret - [yyy]"
 read CLIENT_SECRET
 echo -n "Githubt app name - [some app name]"
 read APP_NAME
+
 
 # Apply defauts
 if [[ -z "$PORT" ]]; then
@@ -62,15 +74,6 @@ if [[ -z "$CLIENT_SECRET" ]]; then
   echo "You need to specify client secret. Exiting..."
   exit 1
 fi
-
-# if [ ! -d ${GHK_ROOT}/.git ];then
-#   echo "Fetching ghk-server code"
-#   git clone ${GHK_REPO} ${GHK_ROOT}
-# else
-#   echo "Updating ghk-server code"
-#   cd ${GHK_ROOT}
-#   git pull
-# fi
 
 # echo "Setting up API auto-health script"
 # cat > /etc/cron.d/ghk-server-health << EOF
