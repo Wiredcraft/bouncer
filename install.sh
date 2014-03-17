@@ -50,7 +50,9 @@ fi
 if [[ -z "$UPSTREAM" ]]; then
   UPSTREAM=127.0.0.1:3000
 else
-  UPSTREAM=`echo $UPSTREAM | sed -e "s/http[s]?:\/\///gi"`
+  # osx sed dose not support -i
+  # @see, http://stackoverflow.com/questions/2320564/variations-of-sed-between-osx-and-gnu-linux
+  UPSTREAM=`echo $UPSTREAM | sed -e "s/http:\/\///g"`
 fi
 if [[ -z "$ORGANIZATIONS" ]]; then
   echo "You need to specify some orgs. Exiting..."
