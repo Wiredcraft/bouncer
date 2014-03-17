@@ -52,7 +52,7 @@ if [[ -z "$UPSTREAM" ]]; then
 else
   # osx sed dose not support -i
   # @see, http://stackoverflow.com/questions/2320564/variations-of-sed-between-osx-and-gnu-linux
-  UPSTREAM=`echo $UPSTREAM | sed -e "s/http:\/\///g"`
+  UPSTREAM=`echo $UPSTREAM | sed -e "s/http:\/\///gi"`
 fi
 if [[ -z "$ORGANIZATIONS" ]]; then
   echo "You need to specify some orgs. Exiting..."
