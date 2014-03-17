@@ -1,0 +1,12 @@
+{
+    "secret": "3adf49dfasdfXy0dfas49Mkr1285mdlC58903asdfkjJepfasdfM",
+    "cookieName": "GHKToken",
+    "cookieOpts": {"maxAge": 900000, "path": "/"},
+    "GHAPPName": "GHKeeper",
+    "GHOAuthScope": "user,read:org",
+    "GHUserOrgsURL": "https://api.github.com/user/orgs",
+    "GHAuthURL": "https://github.com/login/oauth/authorize",
+    "GHAcessTokenURL": "https://github.com/login/oauth/access_token",
+    "OAuthClientId": "64a87b1316e8a0f2fbb2",
+    "OAuthClientSecret": "66b97d961f4499c6095edc67d1af57379151e8c0"
+}

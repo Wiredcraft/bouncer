@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# ghk daemon
+# chkconfig: 345 20 80
+# description: ghk daemon
+# processname: ghk
+
+export USER=root
+export PATH=/opt/node/bin:$PATH
+export NODE_ENV=production
+export NODE_PATH=/opt/node/lib/node_modules:$NODE_PATH
+export DEBUG="ghk:*"
+
+# Specific to this instance of the health script
+export GHK_PORT=PROXY_PORT
+export GHK_UPSTREAM=PROXY_UPSTREAM
+export GHK_REDIRECT_URL=PROXY_REDIRECT_URL
+export GHK_ORGANIZATIONS=PROXY_ORGANIZATIONS
+
+GHK_ROOT=/opt/ghk
+SCRIPT=$GHK_ROOT/proxy.js
+DAEMON=${GHK_ROOT}/node_modules/.bin/forever
+DAEMONO_PTS=""
+
+NAME=ghk-server
+DESC="github keeper"
+LOGFILE=/var/log/$NAME.log
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+do_install() {
+    printf "%-50s" "Installing dependencies ..."
+    cd ${GHK_ROOT}
+    npm install > /dev/null
+}
+
+do_start() {
+    bash -c "$DAEMON start \
+        --append \
+        --pidFile $PIDFILE \
+        --logFile $LOGFILE \
+        $SCRIPT" - $USER
+}
+
+do_stop() {
+    bash -c "$DAEMON stop $SCRIPT" - $USER
+}
+
+case "$1" in
+start)
+    printf "%-50s" "Starting $DESC ..."
+    do_install
+    do_start
+;;
+stop)
+    printf "%-50s" "Stopping $DESC ..."
+    do_stop
+;;
+reload)
+    printf "%-50s" "Reloading $DESC ..."
+    do_stop
+    do_start
+;;
+restart)
+    printf "%-50s" "Restarting $DESC ..."
+    do_stop
+    do_start
+;;
+
+*)
+    echo "Usage: $0 {start|stop|restart|reload}"
+    exit 1
+esac

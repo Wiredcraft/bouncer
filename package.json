@@ -1,0 +1,27 @@
+{
+  "name": "keeper",
+  "version": "0.0.1",
+  "description": "keeping stranger out",
+  "main": "proxy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "y"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "http-proxy": "^1.0.2",
+    "request": "^2.34.0",
+    "cookie-parser": "^1.0.1",
+    "connect": "^2.14.2",
+    "body-parser": "^1.0.0",
+    "qs": "^0.6.6",
+    "cookie-session": "^1.0.1",
+    "cookies": "^0.4.0",
+    "debug": "^0.7.4",
+    "forever": "^0.10.11"
+  }
+}
