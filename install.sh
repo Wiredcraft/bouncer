@@ -1,8 +1,7 @@
 #!/bin/bash
 
-GHK_REPO="https://github.com/Wiredcraft/bouncer.git"
-#GHK_REPO="https://gist.github.com/ab85e25b19a7fe2fc24c.git"
 GHK_ROOT=/opt/ghk
+GHK_REPO="https://github.com/Wiredcraft/bouncer.git"
 GHK_SCRIPT=${GHK_ROOT}/ghk-server
 GHK_DAEMON=/etc/init.d/ghk-server
 NODE_BIN=`which node`
@@ -34,11 +33,11 @@ echo -n "Proxy port - port [80]: "
 read PORT
 echo -n "Upstream - upstream [127.0.0.1:3000]: "
 read UPSTREAM
-echo -n "Allowed organizations, separated names by commma - [xxx,yyy]: "
+echo -n "Allowed organizations, separated names by comma - [xxx,yyy]: "
 read ORGANIZATIONS
-echo -n "Oauth client id - [xxx]"
+echo -n "Oauth client id - [xxx]: "
 read CLIENT_ID
-echo -n "Oauth client secret - [yyy]"
+echo -n "Oauth client secret - [yyy]: "
 read CLIENT_SECRET
 echo -n "Githubt app name - [some app name]"
 read APP_NAME
@@ -51,12 +50,7 @@ fi
 if [[ -z "$UPSTREAM" ]]; then
   UPSTREAM=127.0.0.1:3000
 else
-  UPSTREAM=`echo $UPSTREAM | sed -e "s/http:\/\///gi"`
-fi
-if [[ -z "$REDIRECT" ]]; then
-  REDIRECT=0.0.0.0:80
-else
-  REDIRECT=`echo $REDIRECT | sed -e "s/http:\/\///gi"`
+  UPSTREAM=`echo $UPSTREAM | sed -e "s/http[s]?:\/\///gi"`
 fi
 if [[ -z "$ORGANIZATIONS" ]]; then
   echo "You need to specify some orgs. Exiting..."
@@ -76,7 +70,6 @@ if [[ -z "$CLIENT_SECRET" ]]; then
 fi
 
 echo "Preparing init script"
-echo $UPSTREAM
 cp ${GHK_SCRIPT} ${GHK_DAEMON}
 sed -i "s/PROXY_APP_NAME/\"$APP_NAME\"/g; s/PROXY_CLIENT_ID/$CLIENT_ID/g; s/PROXY_CLIENT_SECRET/$CLIENT_SECRET/g; s/PROXY_PORT/$PORT/g; s/PROXY_UPSTREAM/http:\/\/${UPSTREAM}/g; s/PROXY_ORGANIZATIONS/$ORGANIZATIONS/g" ${GHK_DAEMON}
 echo "Run [sudo] service ghk-server [re]start"
