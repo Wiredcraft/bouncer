@@ -1,5 +1,9 @@
 ## Using github oauth to keeping stranger out
 
+### Synopsis
+
+A http proxy server only allow members of certain github orgs go through.
+
 ### Prerequisites
 
 * [Register a github oauth application](https://github.com/settings/applications/new)

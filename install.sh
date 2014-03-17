@@ -75,12 +75,6 @@ if [[ -z "$CLIENT_SECRET" ]]; then
   exit 1
 fi
 
-# echo "Setting up API auto-health script"
-# cat > /etc/cron.d/ghk-server-health << EOF
-# # Simple health script that attempts to connect to the API and restart it on failure
-# * * * * * root curl --fail http://$USER:$PASS@localhost:$PORT/api > /dev/null 2>&1 || (logger "restarting ghk-server"  && service ghk-server restart)
-# EOF
-
 echo "Preparing init script"
 echo $UPSTREAM
 cp ${GHK_SCRIPT} ${GHK_DAEMON}
