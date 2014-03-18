@@ -4,6 +4,8 @@
 
 A http proxy server only allow members of certain github orgs go through.
 
+**Warning:** Dose not support https at this moment.
+
 ### Prerequisites
 
 * [Register a github oauth application](https://github.com/settings/applications/new)

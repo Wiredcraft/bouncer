@@ -73,5 +73,7 @@ fi
 
 echo "Preparing init script"
 cp ${GHK_SCRIPT} ${GHK_DAEMON}
+chmod +x ${GHK_DAEMON}
+
 sed -i "s/PROXY_APP_NAME/\"$APP_NAME\"/g; s/PROXY_CLIENT_ID/$CLIENT_ID/g; s/PROXY_CLIENT_SECRET/$CLIENT_SECRET/g; s/PROXY_PORT/$PORT/g; s/PROXY_UPSTREAM/http:\/\/${UPSTREAM}/g; s/PROXY_ORGANIZATIONS/$ORGANIZATIONS/g" ${GHK_DAEMON}
 echo "Run [sudo] service ghk-server [re]start"
